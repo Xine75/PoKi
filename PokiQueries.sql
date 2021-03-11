@@ -4,7 +4,8 @@
 
 --2.  What emotions may be associated with a poem?
 --select	Emotion.Name as Emotion
---from	Emotion;
+--from	Emotion
+--order by	Emotion.Id
 
 --3.  How many poems are in the database?
 --select	count(Poem.Id)
@@ -88,25 +89,49 @@
 
 
 --16. How many poems have an emotion of sadness? (This method lists all 4 emotions and counts)
-select	 Name, count(Poem.Id)
-from	PoemEmotion
-join	Emotion on Emotion.Id = PoemEmotion.EmotionId
-join	Poem on Poem.Id = PoemEmotion.PoemId
-group by Name
+--select	 Name, count(Poem.Id)
+--from	PoemEmotion
+--join	Emotion on Emotion.Id = PoemEmotion.EmotionId
+--join	Poem on Poem.Id = PoemEmotion.PoemId
+--group by Name
 --where	Emotion.Id = 3
 
 --17. How many poems are not associated with any emotion?
-select	 Name, count(Poem.Id)
+--select	 Name, count(Poem.Id)
+--from	Poem
+--left join	PoemEmotion on PoemEmotion.PoemId = Poem.Id
+--left join	Emotion on Emotion.Id = PoemEmotion.EmotionId
+--group by	Name
+
+
+
+--18. Which emotion is associated with the least number of poems? Anger - can find all the answers from the 
+--left join table #17
+select	 Name, count(Poem.Id) as NumPoems
 from	Poem
 left join	PoemEmotion on PoemEmotion.PoemId = Poem.Id
 left join	Emotion on Emotion.Id = PoemEmotion.EmotionId
 group by	Name
---having		Name IS NULL
-
-
---18. Which emotion is associated with the least number of poems?
-
 
 --19. Which grade has the largest number of poems with an emotion of joy?
+select	Grade.Name as Grade, count(Poem.Id) as NumPoems
+from	Poem
+left join	PoemEmotion on Poem.Id = PoemEmotion.PoemId
+left join	Emotion on PoemEmotion.EmotionId = Emotion.Id
+left join	Author on Poem.AuthorId=Author.Id
+left join	Grade on Author.GradeId = Grade.Id
+group by	Emotion.Name, Emotion.Id, Grade.Name
+having		Emotion.Name IS NOT NULL and Emotion.Id = 4
+order by	count(Poem.Id) desc
+
 --20. Which gender has the least number of poems with an emotion of fear?
+select	Gender.Name as Gender, count(Poem.Id)as NumPoems
+from	Poem
+left join	PoemEmotion on Poem.Id = PoemEmotion.PoemId
+left join	Emotion on PoemEmotion.EmotionId = Emotion.Id
+left join	Author on Poem.AuthorId = Author.Id
+left join	Gender on Author.GenderId = Gender.Id
+where		Emotion.Id = 2
+group by	Gender.Name
+order by	count(Poem.Id) 
 
