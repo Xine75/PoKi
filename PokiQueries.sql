@@ -101,7 +101,7 @@ from	Poem
 left join	PoemEmotion on PoemEmotion.PoemId = Poem.Id
 left join	Emotion on Emotion.Id = PoemEmotion.EmotionId
 group by	Name
-having		Name IS NULL
+--having		Name IS NULL
 
 
 --18. Which emotion is associated with the least number of poems?
